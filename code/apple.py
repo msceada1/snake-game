@@ -1,4 +1,4 @@
-from settings import * 
+from proyecto.code.settings import *
 from random import choice
 from math import sin
 
