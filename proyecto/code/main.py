@@ -2,6 +2,8 @@ import pygame
 
 from settings import *
 
+from snake import Snake
+
 
 class Main:
     def __init__(self):
@@ -13,9 +15,11 @@ class Main:
         # game objects
         self.bg_rects = [pygame.Rect((col + int(row % 2 == 0)) * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
                          for col in range(0, COLS, 2) for row in range(ROWS)]
+        self.snake = Snake()
 
     # dando color a la celda
     def draw_bg(self):
+        self.display_surface.fill(LIGHT_GREEN)  # color de fondo en verde
         for rect in self.bg_rects:
             pygame.draw.rect(self.display_surface, DARK_GREEN, rect)
 
@@ -25,8 +29,9 @@ class Main:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
-            self.display_surface.fill(LIGHT_GREEN)  # color de fondo en verde
+
             self.draw_bg()
+            self.snake.draw()
             pygame.display.update()
 
 
