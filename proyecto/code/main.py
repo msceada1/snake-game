@@ -20,11 +20,27 @@ class Main:
         self.snake = Snake()
         self.apple = Apple(self.snake)
 
+        # timer
+        self.update_event = pygame.event.custom_type()
+        pygame.time.set_timer(self.update_event, 200)
+
     # dando color a la celda
     def draw_bg(self):
         self.display_surface.fill(LIGHT_GREEN)  # color de fondo en verde
         for rect in self.bg_rects:
             pygame.draw.rect(self.display_surface, DARK_GREEN, rect)
+
+    def collision(self):
+        if self.snake.body[0] == self.apple.pos:
+            self.snake.has_eaten = True
+            self.apple.set_pos()
+
+    def input(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT]: self.snake.direction = pygame.Vector2(1, 0)
+        if keys[pygame.K_LEFT]: self.snake.direction = pygame.Vector2(-1, 0)
+        if keys[pygame.K_UP]: self.snake.direction = pygame.Vector2(0, -1)
+        if keys[pygame.K_DOWN]: self.snake.direction = pygame.Vector2(0, 1)
 
     def run(self):
         while True:
@@ -33,6 +49,14 @@ class Main:
                     pygame.quit()
                     exit()
 
+                if event.type == self.update_event:
+                    self.snake.update()
+                    self.collision()
+
+            # updates
+
+            self.input()
+            # drawing
             self.draw_bg()
             self.snake.draw()
             self.apple.draw()

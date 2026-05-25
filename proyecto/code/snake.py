@@ -1,4 +1,4 @@
-import l
+# import l
 import point
 import pygame.draw
 
@@ -9,7 +9,23 @@ class Snake:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
         self.body = [pygame.Vector2(START_COL - col, START_ROW) for col in range(START_LENGTH)]
+        self.direction = pygame.Vector2(1, 0)
 
+        self.has_eaten = False
+
+    def update(self):
+        if not self.has_eaten:
+            body_copy = self.body[:-1]
+            body_copy.insert(0, body_copy[0] + self.direction)
+            self.body = body_copy[:]
+        else:
+            body_copy = self.body[:]
+            body_copy.insert(0, body_copy[0] + self.direction)
+            self.body = body_copy[:]
+            self.has_eaten = False
+
+        self.body[0].x = self.body[0].x % COLS
+        self.body[0].y = self.body[0].y % ROWS
     def draw(self):
         for point in self.body:
             rect = pygame.Rect(point.x * CELL_SIZE, point.y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
