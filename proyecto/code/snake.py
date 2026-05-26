@@ -1,8 +1,11 @@
 # import l
+from tkinter import image_names
+
 import point
 import pygame.draw
 
 from settings import *
+from os import walk
 
 
 class Snake:
@@ -10,8 +13,21 @@ class Snake:
         self.display_surface = pygame.display.get_surface()
         self.body = [pygame.Vector2(START_COL - col, START_ROW) for col in range(START_LENGTH)]
         self.direction = pygame.Vector2(1, 0)
+        self.draw_data = []
 
         self.has_eaten = False
+
+        self.surfs = self.import_surfs()
+
+    def import_surfs(self):
+        surf_dict = {}
+        for data in walk(join('..', 'graphics', 'snake')):
+            for image_name in image_names:
+                full_path = join(folder_path, image_name)
+                surface = pygame.image.load(full_path).convert_alpha()
+                surf_dict[image_name.split('.')[0]] = surface
+
+        return surf_dict
 
     def update(self):
         if not self.has_eaten:
@@ -30,7 +46,6 @@ class Snake:
     def reset(self):
         self.body = [pygame.Vector2(START_COL - col, START_ROW) for col in range(START_LENGTH)]
         self.direction = pygame.Vector2(1, 0)
-
 
     def draw(self):
         for point in self.body:
