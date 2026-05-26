@@ -23,6 +23,7 @@ class Main:
         # timer
         self.update_event = pygame.event.custom_type()
         pygame.time.set_timer(self.update_event, 200)
+        self.game_active = False
 
     # dando color a la celda
     def draw_bg(self):
@@ -34,6 +35,11 @@ class Main:
         if self.snake.body[0] == self.apple.pos:
             self.snake.has_eaten = True
             self.apple.set_pos()
+
+        # fin de juego
+        if self.snake.body[0] in self.snake.body[1:]:
+            self.snake.reset()
+            self.game_active = False
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -49,11 +55,14 @@ class Main:
                     pygame.quit()
                     exit()
 
-                if event.type == self.update_event:
+                if event.type == self.update_event and self.game_active:
                     self.snake.update()
-                    self.collision()
 
+                if event.type == pygame.KEYDOWN and not self.game_active:
+                    self.game_active = True
             # updates
+            self.input()
+            self.collision()
 
             self.input()
             # drawing
