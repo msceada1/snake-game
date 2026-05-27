@@ -43,10 +43,14 @@ class Main:
 
     def input(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT]: self.snake.direction = pygame.Vector2(1, 0)
-        if keys[pygame.K_LEFT]: self.snake.direction = pygame.Vector2(-1, 0)
-        if keys[pygame.K_UP]: self.snake.direction = pygame.Vector2(0, -1)
-        if keys[pygame.K_DOWN]: self.snake.direction = pygame.Vector2(0, 1)
+        if keys[pygame.K_RIGHT]:
+            self.snake.direction = pygame.Vector2(1, 0) if self.snake.direction.x != -1 else self.snake.direction
+        if keys[pygame.K_LEFT]:
+            self.snake.direction = pygame.Vector2(-1, 0) if self.snake.direction.x != 1 else self.snake.direction
+        if keys[pygame.K_UP]:
+            self.snake.direction = pygame.Vector2(0, -1) if self.snake.direction.y != 1 else self.snake.direction
+        if keys[pygame.K_DOWN]:
+            self.snake.direction = pygame.Vector2(0, 1) if self.snake.direction.y != -1 else self.snake.direction
 
     def run(self):
         while True:
